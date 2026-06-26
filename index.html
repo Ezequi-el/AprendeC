@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende C — Juego Interactivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- HEADER -->
+        <header id="appHeader">
+            <div class="header-inner">
+                <div class="header-left">
+                    <button id="btnBack" class="btn-icon hidden" title="Volver"><i class="fas fa-arrow-left"></i></button>
+                    <div class="logo" onclick="App.navigate('home')">
+                        <span class="logo-icon">&lt;/&gt;</span>
+                        <span class="logo-text">Aprende C</span>
+                    </div>
+                </div>
+                <div class="header-center">
+                    <div class="xp-bar-container">
+                        <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+                        <span class="xp-bar-label" id="xpBarLabel">Nivel 1 — 0/50 XP</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="streak-badge" id="streakBadge" title="Racha de días">
+                        <i class="fas fa-fire"></i>
+                        <span id="streakCount">0</span>
+                    </div>
+                    <button id="btnTheme" class="btn-icon" title="Cambiar tema"><i class="fas fa-moon"></i></button>
+                    <button id="btnAchievements" class="btn-icon" title="Logros"><i class="fas fa-trophy"></i></button>
+                    <button id="btnFreePractice" class="btn-icon" title="Práctica libre"><i class="fas fa-code"></i></button>
+                    <button id="btnSettings" class="btn-icon" title="Configuración"><i class="fas fa-cog"></i></button>
+                    <button id="btnAuth" class="btn-icon" title="Iniciar sesión / Cuenta"><i class="fas fa-user"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- SCREENS -->
+        <main id="screenContainer">
+
+            <!-- HOME SCREEN -->
+            <section id="screenHome" class="screen active">
+                <div class="home-container">
+                    <div class="home-hero">
+                        <div class="home-hero-icon">&lt;/&gt;</div>
+                        <h1 class="home-title">Aprende C</h1>
+                        <p class="home-subtitle">Programa, compila y domina Algoritmos y Estructuras de Datos</p>
+                    </div>
+                    <div class="home-stats">
+                        <div class="home-stat">
+                            <span class="home-stat-value" id="homeStatLevel">1</span>
+                            <span class="home-stat-label">Nivel</span>
+                        </div>
+                        <div class="home-stat">
+                            <span class="home-stat-value" id="homeStatXP">0</span>
+                            <span class="home-stat-label">XP Total</span>
+                        </div>
+                        <div class="home-stat">
+                            <span class="home-stat-value" id="homeStatCompleted">0<span class="home-stat-total">/32</span></span>
+                            <span class="home-stat-label">Completados</span>
+                        </div>
+                        <div class="home-stat">
+                            <span class="home-stat-value" id="homeStatStreak">0</span>
+                            <span class="home-stat-label">Racha</span>
+                        </div>
+                    </div>
+                    <div class="home-actions">
+                        <button class="btn btn-primary btn-lg" id="btnStartMap">
+                            <i class="fas fa-map"></i> Mapa de Niveles
+                        </button>
+                        <button class="btn btn-secondary btn-lg" id="btnStartFree">
+                            <i class="fas fa-code"></i> Práctica Libre
+                        </button>
+                    </div>
+                    <div class="home-progress-labels">
+                        <div class="progress-module" id="homeModule0">
+                            <span class="progress-dot"></span>
+                            <span>Módulo 0: C Básico</span>
+                            <span class="progress-pct" id="homeModule0Pct">0%</span>
+                        </div>
+                        <div class="progress-module" id="homeModule1">
+                            <span class="progress-dot"></span>
+                            <span>Módulo I: Algoritmos</span>
+                            <span class="progress-pct" id="homeModule1Pct">0%</span>
+                        </div>
+                        <div class="progress-module" id="homeModule2">
+                            <span class="progress-dot"></span>
+                            <span>Módulo II: Lineales</span>
+                            <span class="progress-pct" id="homeModule2Pct">0%</span>
+                        </div>
+                        <div class="progress-module" id="homeModule3">
+                            <span class="progress-dot"></span>
+                            <span>Módulo III: No Lineales</span>
+                            <span class="progress-pct" id="homeModule3Pct">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAP SCREEN -->
+            <section id="screenMap" class="screen">
+                <div class="map-container">
+                    <div class="map-path" id="mapPath">
+                        <!-- Nodes rendered by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- THEORY SCREEN -->
+            <section id="screenTheory" class="screen">
+                <div class="theory-container">
+                    <div class="theory-header" id="theoryHeader">
+                        <span class="theory-module" id="theoryModule">Módulo 0</span>
+                        <span class="theory-level">Nivel 1</span>
+                    </div>
+                    <h2 class="theory-title" id="theoryTitle">Hola Mundo</h2>
+                    <div class="theory-content" id="theoryContent">
+                        <!-- Theory content rendered by JS -->
+                    </div>
+                    <div class="theory-actions">
+                        <button class="btn btn-secondary" id="btnTheoryBack"><i class="fas fa-arrow-left"></i> Volver al mapa</button>
+                        <button class="btn btn-primary" id="btnTheoryContinue">Entendido, ¡vamos! <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXERCISE SCREEN -->
+            <section id="screenExercise" class="screen">
+                <div class="exercise-container">
+                    <div class="exercise-header">
+                        <div class="exercise-info">
+                            <span class="exercise-level" id="exerciseLevel">Nivel 1</span>
+                            <span class="exercise-name" id="exerciseName">Hola Mundo</span>
+                        </div>
+                        <div class="exercise-type-badge" id="exerciseType">Llenar espacios</div>
+                    </div>
+                    <div class="exercise-instruction" id="exerciseInstruction">
+                        <!-- Instruction rendered by JS -->
+                    </div>
+                    <div class="exercise-body">
+                        <div class="editor-panel">
+                            <div class="editor-header">
+                                <span><i class="fas fa-code"></i> editor.c</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-sm btn-ghost" id="btnReset" title="Resetear código"><i class="fas fa-undo"></i></button>
+                                    <button class="btn btn-sm btn-ghost" id="btnFormat" title="Atajos"><i class="fas fa-keyboard"></i></button>
+                                </div>
+                            </div>
+                            <div class="editor-wrapper" id="editorWrapper"></div>
+                        </div>
+                        <div class="output-panel">
+                            <div class="output-header">
+                                <span><i class="fas fa-terminal"></i> salida</span>
+                                <button class="btn btn-sm btn-ghost" id="btnClearOutput"><i class="fas fa-eraser"></i></button>
+                            </div>
+                            <div class="output-tabs">
+                                <button class="output-tab active" data-tab="output">Salida</button>
+                                <button class="output-tab" data-tab="errors">Errores</button>
+                            </div>
+                            <pre class="output-content" id="outputContent"><span class="output-placeholder">Presiona "Ejecutar" para ver la salida...</span></pre>
+                            <pre class="output-content hidden" id="errorsContent"></pre>
+                        </div>
+                    </div>
+                    <div class="exercise-footer">
+                        <div class="hints-section" id="hintsSection">
+                            <button class="btn btn-hint" id="btnHint1"><i class="fas fa-lightbulb"></i> Pista 1 <span class="hint-cost">(-30% XP)</span></button>
+                            <button class="btn btn-hint" id="btnHint2" disabled><i class="fas fa-lightbulb"></i> Pista 2 <span class="hint-cost">(-30% XP)</span></button>
+                            <button class="btn btn-hint" id="btnHint3" disabled><i class="fas fa-lightbulb"></i> Pista 3 <span class="hint-cost">(-30% XP)</span></button>
+                            <div class="hint-text hidden" id="hintText"></div>
+                        </div>
+                        <div class="exercise-actions">
+                            <button class="btn btn-secondary" id="btnSkipLevel"><i class="fas fa-forward"></i> Saltar</button>
+                            <button class="btn btn-accent" id="btnRun"><i class="fas fa-play"></i> Ejecutar</button>
+                            <button class="btn btn-primary hidden" id="btnSubmit"><i class="fas fa-check"></i> Verificar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESULT SCREEN -->
+            <section id="screenResult" class="screen">
+                <div class="result-container">
+                    <div class="result-icon" id="resultIcon">
+                        <!-- Green check or red X -->
+                    </div>
+                    <h2 class="result-title" id="resultTitle">¡Correcto!</h2>
+                    <p class="result-message" id="resultMessage">Tu código funciona perfectamente.</p>
+                    <div class="result-stars" id="resultStars">
+                        <!-- Stars rendered by JS -->
+                    </div>
+                    <div class="result-xp" id="resultXp">
+                        <span class="result-xp-value">+0</span> XP
+                    </div>
+                    <div class="result-output-preview" id="resultOutputPreview">
+                        <h4>Tu salida:</h4>
+                        <pre id="resultUserOutput"></pre>
+                        <h4>Salida esperada:</h4>
+                        <pre id="resultExpectedOutput"></pre>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn btn-secondary" id="btnResultMap"><i class="fas fa-map"></i> Mapa</button>
+                        <button class="btn btn-primary" id="btnResultNext">Siguiente nivel <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACHIEVEMENTS SCREEN -->
+            <section id="screenAchievements" class="screen">
+                <div class="achievements-container">
+                    <h2 class="section-title"><i class="fas fa-trophy"></i> Logros</h2>
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <!-- Achievements rendered by JS -->
+                    </div>
+                    <button class="btn btn-secondary" id="btnAchievementsBack"><i class="fas fa-arrow-left"></i> Volver</button>
+                </div>
+            </section>
+
+            <!-- FREE PRACTICE SCREEN -->
+            <section id="screenFreePractice" class="screen">
+                <div class="free-container">
+                    <div class="free-header">
+                        <h2><i class="fas fa-code"></i> Práctica Libre</h2>
+                        <p>Escribe cualquier código C y compílalo. Sin xp, sin presión — solo práctica.</p>
+                    </div>
+                    <div class="exercise-body">
+                        <div class="editor-panel">
+                            <div class="editor-header">
+                                <span><i class="fas fa-code"></i> editor.c</span>
+                            </div>
+                            <div class="editor-wrapper" id="freeEditorWrapper"></div>
+                        </div>
+                        <div class="output-panel">
+                            <div class="output-header">
+                                <span><i class="fas fa-terminal"></i> salida</span>
+                                <button class="btn btn-sm btn-ghost" id="btnFreeClear"><i class="fas fa-eraser"></i></button>
+                            </div>
+                            <pre class="output-content" id="freeOutputContent"><span class="output-placeholder">Presiona "Ejecutar" para compilar tu código...</span></pre>
+                        </div>
+                    </div>
+                    <div class="free-footer">
+                        <button class="btn btn-secondary" id="btnFreeBack"><i class="fas fa-arrow-left"></i> Volver</button>
+                        <div class="free-mode-toggle">
+                            <button class="btn btn-sm btn-toggle active" id="btnModeJSCPP">JSCPP (local)</button>
+                            <button class="btn btn-sm btn-toggle" id="btnModeJudge0">GCC (en línea)</button>
+                        </div>
+                        <button class="btn btn-accent" id="btnFreeRun"><i class="fas fa-play"></i> Ejecutar</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS SCREEN -->
+            <section id="screenSettings" class="screen">
+                <div class="settings-container">
+                    <h2 class="section-title"><i class="fas fa-cog"></i> Configuración</h2>
+                    <div class="settings-group">
+                        <h3>Apariencia</h3>
+                        <div class="setting-row">
+                            <span>Tema</span>
+                            <div class="theme-toggle-group">
+                                <button class="btn btn-sm btn-toggle" id="btnThemeDark"><i class="fas fa-moon"></i> Oscuro</button>
+                                <button class="btn btn-sm btn-toggle" id="btnThemeLight"><i class="fas fa-sun"></i> Claro</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Compilador</h3>
+                        <div class="setting-row">
+                            <span>Servidor Judge0 (niveles avanzados)</span>
+                            <span class="setting-status" id="judge0Status">Verificando...</span>
+                        </div>
+                        <div class="setting-row">
+                            <span>Requests restantes hoy</span>
+                            <span class="setting-status" id="judge0Remaining">—</span>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Progreso</h3>
+                        <div class="setting-row">
+                            <span>Nivel actual</span>
+                            <span class="setting-status" id="settingsCurrentLevel">1</span>
+                        </div>
+                        <div class="setting-row">
+                            <span>XP total</span>
+                            <span class="setting-status" id="settingsTotalXP">0</span>
+                        </div>
+                        <div class="setting-row">
+                            <span>Niveles completados</span>
+                            <span class="setting-status" id="settingsCompleted">0/32</span>
+                        </div>
+                    </div>
+                    <div class="settings-group settings-danger">
+                        <h3>Zona peligrosa</h3>
+                        <div class="setting-row">
+                            <span>Reiniciar todo el progreso</span>
+                            <button class="btn btn-sm btn-danger" id="btnResetProgress"><i class="fas fa-trash"></i> Reiniciar</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="btnSettingsBack"><i class="fas fa-arrow-left"></i> Volver</button>
+                </div>
+            </section>
+
+            <!-- BUG MODE SCREEN (find the bug) -->
+            <section id="screenBug" class="screen">
+                <div class="exercise-container">
+                    <div class="exercise-header">
+                        <div class="exercise-info">
+                            <span class="exercise-level" id="bugLevel">Nivel 10</span>
+                            <span class="exercise-name" id="bugName">Encuentra el bug</span>
+                        </div>
+                        <div class="exercise-type-badge bug">Encuentra el error</div>
+                    </div>
+                    <div class="exercise-instruction" id="bugInstruction">
+                        <!-- Bug instruction rendered by JS -->
+                    </div>
+                    <div class="exercise-body">
+                        <div class="editor-panel">
+                            <div class="editor-header">
+                                <span><i class="fas fa-bug"></i> buggy.c</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-sm btn-ghost" id="btnBugReset"><i class="fas fa-undo"></i></button>
+                                </div>
+                            </div>
+                            <div class="editor-wrapper" id="bugEditorWrapper"></div>
+                        </div>
+                        <div class="output-panel">
+                            <div class="output-header">
+                                <span><i class="fas fa-terminal"></i> salida</span>
+                            </div>
+                            <pre class="output-content" id="bugOutputContent"><span class="output-placeholder">Ejecuta el código para ver qué produce...</span></pre>
+                        </div>
+                    </div>
+                    <div class="exercise-footer">
+                        <div class="exercise-actions">
+                            <button class="btn btn-secondary" id="btnBugBack"><i class="fas fa-arrow-left"></i> Volver</button>
+                            <button class="btn btn-accent" id="btnBugRun"><i class="fas fa-play"></i> Ejecutar</button>
+                            <button class="btn btn-primary" id="btnBugSubmit"><i class="fas fa-check"></i> Verificar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- MODALS -->
+        <div class="modal-overlay hidden" id="modalOverlay">
+            <div class="modal" id="modalContent">
+                <!-- Modal content rendered by JS -->
+            </div>
+        </div>
+
+        <!-- CONFETTI CANVAS -->
+        <canvas id="confettiCanvas"></canvas>
+
+        <!-- NOTIFICATION TOAST -->
+        <div class="toast-container" id="toastContainer"></div>
+
+        <!-- Importmap: resolve npm packages via CDN -->
+        <script type="importmap">
+        {
+            "imports": {
+                "browsercc": "https://cdn.jsdelivr.net/npm/browsercc@0.1.1/dist/index.js",
+                "@bjorn3/browser_wasi_shim": "https://cdn.jsdelivr.net/npm/@bjorn3/browser_wasi_shim@0.4.2/+esm",
+                "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+            }
+        }
+        </script>
+
+        <!-- Config: set SUPABASE_URL and SUPABASE_ANON_KEY for cloud sync -->
+        <script>
+        window.SUPABASE_URL = '';
+        window.SUPABASE_ANON_KEY = '';
+        </script>
+
+        <!-- SCRIPTS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+    <script src="js/jscpp-shim.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+        <script src="js/levels.js"></script>
+        <script src="js/game.js"></script>
+        <script src="js/compiler.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/app.js"></script>
+        <!-- Module entry: WASM compiler + Supabase -->
+        <script type="module" src="src/main.js"></script>
+    </div>
+</body>
+</html>
